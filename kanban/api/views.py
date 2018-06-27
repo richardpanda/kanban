@@ -14,4 +14,8 @@ class SignUp(APIView):
                 {"token": user.generate_jwt()}, status=status.HTTP_201_CREATED
             )
         else:
-            pass
+            errors = [
+                dict(field=field, message=detail[0])
+                for field, detail in user_serializer.errors.items()
+            ]
+            return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
